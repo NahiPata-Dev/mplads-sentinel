@@ -12,6 +12,7 @@ const emptyStats = {
 };
 
 const formatCurrency = (value) => `₹${Number(value || 0).toLocaleString('en-IN')}`;
+const apiBase = import.meta.env.VITE_API_BASE_URL || '';
 
 const riskTheme = {
   RED: { background: '#ffebeb', color: '#d93025' },
@@ -60,9 +61,9 @@ function App() {
     setError('');
     try {
       const [statsResponse, mpsResponse, statesResponse] = await Promise.all([
-        axios.get('/api/dashboard/stats'),
-        axios.get('/api/mps', { params: { limit: 200 } }),
-        axios.get('/api/states'),
+        axios.get(`${apiBase}/api/dashboard/stats`),
+        axios.get(`${apiBase}/api/mps`, { params: { limit: 200 } }),
+        axios.get(`${apiBase}/api/states`),
       ]);
 
       const fetchedMps = mpsResponse.data.mps || [];
@@ -84,7 +85,7 @@ function App() {
 
   const handleFeedback = async (mpName, label, notes = '') => {
     try {
-      await axios.post('/api/feedback', {
+      await axios.post(`${apiBase}/api/feedback`, {
         mp_name: mpName,
         label,
         notes,

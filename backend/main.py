@@ -1,3 +1,4 @@
+import os
 import uuid
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -21,9 +22,18 @@ DATA_DIR = PROJECT_ROOT / "data"
 ENHANCED_PATH = DATA_DIR / "mplads_enhanced.csv"
 
 app = FastAPI(title="MPLADS Sentinel AI API")
+
+allowed_origins = [
+    origin.strip()
+    for origin in os.getenv("CORS_ORIGINS", "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:3000").split(",")
+    if origin.strip()
+]
+allow_origin_regex = os.getenv("CORS_ORIGIN_REGEX")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=allowed_origins,
+    allow_origin_regex=allow_origin_regex,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
