@@ -119,18 +119,18 @@ function App() {
     if (type === 'financial') {
       const threshold2 = median + 2 * mad;
       const threshold3 = median + 3 * mad;
-      return `Financial score: ₹${formatCurrency(allocation).replace('₹', '')} allocated vs state median ₹${formatCurrency(median).replace('₹', '')}. Trigger points: ₹${formatCurrency(threshold2).replace('₹', '')} (2×MAD) and ₹${formatCurrency(threshold3).replace('₹', '')} (3×MAD).`;
+      return `Allocation ₹${formatCurrency(allocation).replace('₹', '')} vs state median ₹${formatCurrency(median).replace('₹', '')}; trigger bands ₹${formatCurrency(threshold2).replace('₹', '')} and ₹${formatCurrency(threshold3).replace('₹', '')}.`;
     }
 
     if (type === 'duplicate') {
-      return mp.risk_explanation?.duplicate || 'No duplicate risk signal detected from name, constituency, and state similarity.';
+      return mp.risk_explanation?.duplicate || 'No duplicate signal from name, constituency, and state similarity.';
     }
 
     if (type === 'performance') {
-      return `Performance score: money spent ₹${formatCurrency(actualSpent).replace('₹', '')} vs expected ₹${formatCurrency(expectedSpent).replace('₹', '')} for ${completionPct}% work completion. Difference: ₹${formatCurrency(Math.abs(diff)).replace('₹', '')} ${diff >= 0 ? 'above' : 'below'} the expected spend.`;
+      return `Spent ₹${formatCurrency(actualSpent).replace('₹', '')} vs expected ₹${formatCurrency(expectedSpent).replace('₹', '')} for ${completionPct}% completion.`;
     }
 
-    return `Overall score formula: (Financial × 0.30) + (Duplicate × 0.20) + (Performance × 0.30) + 10, normalized to 0-100. Current value: ${Number(mp.risk_score ?? 0).toFixed(1)}.`;
+    return `Weighted score: 0.30 × financial + 0.20 × duplicate + 0.30 × performance + 10 = ${Number(mp.risk_score ?? 0).toFixed(1)}.`;
   };
 
   return (
